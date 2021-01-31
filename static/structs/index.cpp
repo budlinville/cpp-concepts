@@ -12,6 +12,9 @@ int getRand(int min, int max) {
 }
 
 int main() {
+	/****************************
+	 * Static for classes/structs
+	 * **************************/
 	Golf golfy;
 	// How to access static vs non-static variables/methods of structs/classes
 	cout << golfy.game << endl;
@@ -31,8 +34,17 @@ int main() {
 			default: cout << "ERROR: "; golf.par(par); break;
 		}
 	}
-
 	cout << "----------" << endl << "Par was " << Golf::getPar() << "; You shot " << Golf::getScore() << endl;
+
+	/****************************
+	 * Static local
+	 * **************************/
+	// x is still within the scope of the loop, but its value persists through iterations
+	for (int i = 0; i < 10; i++) {
+		static int x;
+		x += i;
+		cout << "Local static x: " << x << endl;
+	}
 
 	return 0;
 }
