@@ -1,4 +1,4 @@
-#include "linked-list.cpp";
+#include "linked-list.cpp"
 
 int main() {
 	LinkedList<int>* list = new LinkedList<int>();

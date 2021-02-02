@@ -44,9 +44,19 @@ void print3(vector<T>& vec) {
 	cout << endl;
 }
 
-// Pre-C++11 way of iterating through a vector, but using indices
+// same as above, but using C++'s weakly-typed type, 'auto', to make code cleaner
 template <typename T>
 void print4(vector<T>& vec) {
+	for (auto it = vec.begin(); it != vec.end(); ++it) {
+		cout << *it;
+		if (it +1 != vec.end()) cout << ", ";
+	}
+	cout << endl;
+}
+
+// Pre-C++11 way of iterating through a vector, but using indices
+template <typename T>
+void print5(vector<T>& vec) {
 	for (typename vector<T>::size_type i = 0; i != vec.size(); i++) {
 		cout << vec[i];
 		if (i != vec.size() - 1) cout << ", ";
@@ -69,6 +79,7 @@ int main() {
 	print2(nums);
 	print3(nums);
 	print4(nums);
+	print5(nums);
 
 	//erase the fifth element
 	nums.erase(nums.begin() + 4);
