@@ -20,7 +20,7 @@ void addMoneySafely() {
 
 // unlike .lock(), .try_lock() is non-blocking... if a thread cannot obtain lock,
 // it will skip over the mutex code and proceedAsNormal
-// try_lock returns true if lock obtaines; false otherwise
+// try_lock returns true if lock obtained; false otherwise
 int counter = 0;
 std::mutex mtx2;
 void demonstrateTryLock(int end) {

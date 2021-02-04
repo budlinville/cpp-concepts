@@ -7,7 +7,7 @@
  * How do vectors resize?
  * Creates new vector twice the length of old one, copies old values over
  * 
- * When passing to a function, do try to use references, so you're creating
+ * When passing to a function, do try to use references, so you're not creating
  * an entire copy of the vector
  */
 
