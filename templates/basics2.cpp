@@ -50,7 +50,7 @@ std::pair<T,T> MinMax(T (&pArr)[3], int size) {
 
 /**********************************
  * Specializations for const char*
- ****************************/
+ **********************************/
 template<>
 const char* ArraySum(const char* (&pArr)[3], int size) {
     char* concat = new char[0];
@@ -83,6 +83,38 @@ std::pair<const char*,const char*> MinMax(const char * (&pArr)[3], int size) {
     return std::pair<const char*,const char*>(min, max);
 }
 
+/**********************************
+ * Specializations for std::string
+ **********************************/
+template<>
+std::string ArraySum(std::string (&pArr)[3], int size) {
+    std::string concat = "";
+    for (int i = 0; i < size; i++) {
+        concat = concat + pArr[i];
+    }
+    return concat;
+}
+
+template<>
+std::string Max(std::string (&pArr)[3], int size) {
+    std::string max = pArr[0];
+    for (int i = 1; i < size; i++) {
+        max = max.compare(pArr[i]) >= 0 ? max : pArr[i];
+    }
+    return max;
+}
+
+template<>
+std::pair<std::string,std::string> MinMax(std::string (&pArr)[3], int size) {
+    std::string max = pArr[0];
+    std::string min = pArr[0];
+    for (int i = 1; i < size; i++) {
+        max = max.compare(pArr[i]) >= 0 ? max : pArr[i];
+        min = min.compare(pArr[i]) <= 0 ? min : pArr[i];
+    }
+    return std::pair<std::string,std::string>(min, max);
+}
+
 
 int main() {
     int arr1[] {5,6,7};
@@ -98,11 +130,17 @@ int main() {
     std::cout << "(" << MinMax(arr1, 3).first << ", " << MinMax(arr1, 3).second << ")" << std::endl;
     std::cout << "(" << MinMax(arr2, 3).first << ", " << MinMax(arr2, 3).second << ")" << std::endl;
 
-    // Specializations
-    const char* arr_cc1[] {"aa", "bb", "cc"};
-    std::cout << ArraySum(arr_cc1, 3) << std::endl;
-    std::cout << Max(arr_cc1, 3) << std::endl;
-    std::cout << "(" << MinMax(arr_cc1, 3).first << ", " << MinMax(arr_cc1, 3).second << ")" << std::endl;
+    // Specializations for const char*
+    const char* arr_cc[] {"aa", "bb", "cc"};
+    std::cout << ArraySum(arr_cc, 3) << std::endl;
+    std::cout << Max(arr_cc, 3) << std::endl;
+    std::cout << "(" << MinMax(arr_cc, 3).first << ", " << MinMax(arr_cc, 3).second << ")" << std::endl;
+
+    // Specializations for std::string
+    std::string arr_str[] {"aa", "bb", "cc"};
+    std::cout << ArraySum(arr_str, 3) << std::endl;
+    std::cout << Max(arr_str, 3) << std::endl;
+    std::cout << "(" << MinMax(arr_str, 3).first << ", " << MinMax(arr_str, 3).second << ")" << std::endl;
 
     return 0;
 }
