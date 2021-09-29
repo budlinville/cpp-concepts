@@ -116,6 +116,21 @@ std::pair<std::string,std::string> MinMax(std::string (&pArr)[3], int size) {
 }
 
 
+/*****************************************************************************************
+    Note that specialized template functions must be defined in .cpp's. If defined in .h,
+    will violate the one definition rule (if included in multiple.cpp's)
+******************************************************************************************/
+
+// Non-type template arguments
+template <typename T, int size>
+T Sum_NTTA(T (&pArr)[size]) {
+    T sum = (T)0;
+    for (int i = 0; i < size; i++) {
+        sum += pArr[i];
+    }
+    return sum;
+}
+
 int main() {
     int arr1[] {5,6,7};
     float arr2[] {5.1,6.4,7.2};
@@ -141,6 +156,10 @@ int main() {
     std::cout << ArraySum(arr_str, 3) << std::endl;
     std::cout << Max(arr_str, 3) << std::endl;
     std::cout << "(" << MinMax(arr_str, 3).first << ", " << MinMax(arr_str, 3).second << ")" << std::endl;
+
+    // Non-type template arguments
+    std::cout << Sum_NTTA<int>(arr1) << std::endl;
+    std::cout << Sum_NTTA<float>(arr2) << std::endl;
 
     return 0;
 }
