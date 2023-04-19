@@ -1,30 +1,59 @@
+// Run with g++ -pthread threads.cpp && ./a.out
+
 #include <iostream>
-#include <mutex>
+#include <list>
 #include <thread>
-#include <chrono>
+#include <mutex>
+
+using namespace std;
+
+
+list<int> g_data;
+const int SIZE = 5000000;
+std::mutex g_mutex;
+
+
+void simulateDownload(bool useMutex) {
+    for (int i=0; i < SIZE; i++) {
+        if (useMutex) g_mutex.lock();
+        g_data.push_back(i);
+        if (useMutex) g_mutex.unlock();
+    }
+}
+
+void simulateDownload2(bool useMutex) {
+    for (int i=0; i < SIZE; i++) {
+        if (useMutex) g_mutex.lock();
+        g_data.push_back(i);
+        if (useMutex) g_mutex.unlock();
+    }
+}
 
 int main() {
-    // Thread 1
-    std::mutex mtx;
+    std::thread thDownloader1(simulateDownload, false);
+    std::thread thDownloader2(simulateDownload2, false);
 
-    puts("(1) T1: T1 locking mutex");
-    mtx.lock();                                 // (1) Lock mutex
 
-    std::thread t2([&mtx]() {
-        // Thread 2
-        puts("(2) T2: Waiting for T1 to unlock mutex");
-        mtx.lock();                             // (2) Pause until mutex is unlocked, then (5) lock it for this thread
-        puts("(5) T2: T1 unlocked  mutex, T2 hs now locked it");
-
-        mtx.unlock();                           // (6) Unlock mutex
-        puts("(6) T2: T2 has unlocked mutex");
-    });
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-    puts("(3) T1: T1 unlocking mutex");
-    mtx.unlock();                               // (3) Unlock mutex
+    thDownloader1.join();
+    thDownloader2.join();
     
-    puts("(4) T1: T1 waiting for T2 to finish");
-    t2.join();                                  // (4) Wait for thread 2 to finish
+    cout << "[main] Expected : " << SIZE * 2 << endl;
+    cout << "[main] Actual   : " << g_data.size() << endl;
+    cout << "[main] BAD! race condition" << endl;
+
+    //--------------------------------------------------------------
+
+    g_data.clear();
+
+    std::thread thDownloader3(simulateDownload, true);
+    std::thread thDownloader4(simulateDownload2, true);
+
+    thDownloader3.join();
+    thDownloader4.join();
+    
+    cout << "[main] Expected : " << SIZE * 2 << endl;
+    cout << "[main] Actual   : " << g_data.size() << endl;
+    cout << "[main] GOOD! mutex used" << endl;
+
+    return 0;
 }

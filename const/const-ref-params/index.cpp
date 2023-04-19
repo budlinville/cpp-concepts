@@ -4,7 +4,7 @@
 using namespace std;
 
 // Notice below that even though we are passing a const reference to the constructor,
-// the object is still copied, because we ar assigning it to a new member variable.
+// the object is still copied, because we are assigning it to a new member variable.
 
 template<typename T>
 struct Foo {
